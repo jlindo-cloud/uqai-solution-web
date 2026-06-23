@@ -1,0 +1,70 @@
+package com.uqai.backend.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
+@Entity
+@Table(name = "usuarios")
+public class Usuario {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    @NotBlank private String nombre;
+
+    @Column(nullable = false)
+    @NotBlank private String apellidos;
+
+    @Column(unique = true, nullable = false)
+    @Email private String email;
+
+    @Column(nullable = false)
+    private String password; // SIEMPRE hash bcrypt — NUNCA texto plano
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Rol rol; // ADMIN, USER
+
+    @Column(nullable = false)
+    @NotBlank private String area;
+
+    public Usuario() {}
+
+    public Usuario(Long id, String nombre, String apellidos, String email,
+                   String password, Rol rol, String area) {
+        this.id = id; this.nombre = nombre; this.apellidos = apellidos;
+        this.email = email; this.password = password; this.rol = rol; this.area = area;
+    }
+
+    // ── Getters / Setters ──
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public String getApellidos() { return apellidos; }
+    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    public Rol getRol() { return rol; }
+    public void setRol(Rol rol) { this.rol = rol; }
+    public String getArea() { return area; }
+    public void setArea(String area) { this.area = area; }
+
+    // ── Builder manual ──
+    public static Builder builder() { return new Builder(); }
+
+    public static class Builder {
+        private final Usuario u = new Usuario();
+        public Builder id(Long v)        { u.id = v; return this; }
+        public Builder nombre(String v)  { u.nombre = v; return this; }
+        public Builder apellidos(String v){ u.apellidos = v; return this; }
+        public Builder email(String v)   { u.email = v; return this; }
+        public Builder password(String v){ u.password = v; return this; }
+        public Builder rol(Rol v)        { u.rol = v; return this; }
+        public Builder area(String v)    { u.area = v; return this; }
+        public Usuario build()           { return u; }
+    }
+}
